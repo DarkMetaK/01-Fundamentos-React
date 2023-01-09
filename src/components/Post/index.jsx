@@ -1,32 +1,54 @@
+import { formatDistanceToNow } from 'date-fns';
+import ptBr from 'date-fns/locale/pt-BR';
+
+import { Avatar } from '../Avatar'
 import { Comment } from '../Comment'
+
 import styles from './Post.module.css'
 
-export function Post() {
+export function Post({ author, publishedAt, content }) {
+
+  const publishDate = publishedAt.toLocaleString('default', {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit'
+  });
+
+  const howLongAgo = formatDistanceToNow(publishedAt, {
+    locale: ptBr,
+    addSuffix: true
+  })
+  
   return (
     <article className={styles.post}>
 
       <header>
         <div className={styles.author}>
-          <img
-            src="https://avatars.githubusercontent.com/u/77026784?v=4"
-            className={styles.avatar}
-          />
+          <Avatar src={author.avatarUrl} />
           <div className={styles.info}>
-            <strong>Matheus Porto</strong>
-            <span>Web Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
         <time
-          title='08 de Janeiro às 16:05h' dateTime='2023-01-08 16:05:00'
+          title={`${publishDate} às ${publishedAt.toLocaleTimeString('default', {
+            hour: '2-digit', 
+            minute:'2-digit'
+          })}h`}
+          dateTime={publishedAt.toLocaleString()}
         >
-        Públicado há 1h
+        {`Publicado ${howLongAgo}`}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa 👋</p>
-        <p>Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀</p>
-        <p><a href=''>jane.design/doctorcare</a></p>
+        {content.map((item) => {
+          return(
+            <p>
+              {item.type === 'link' ? <a href=''>{item.content}</a> : item.content}
+            </p>
+          )
+        })}
         <p>
           <a href=''>#novoprojeto</a>{' '}
           <a href=''>#nlw</a>{' '}
