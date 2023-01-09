@@ -102,8 +102,12 @@
 
   transition: background-color 0.1s;
 }
-.btnContainer button:hover {
+.btnContainer button:not(:disabled):hover {
   background-color: var(--green-300);
+}
+.btnContainer button:disabled {
+  opacity: .7;
+  cursor: not-allowed;
 }
 
 .commentList {

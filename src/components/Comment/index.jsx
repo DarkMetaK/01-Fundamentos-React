@@ -1,40 +1,69 @@
+import { formatDistanceToNow } from 'date-fns';
+import ptBr from 'date-fns/locale/pt-BR';
 import { ThumbsUp, Trash } from 'phosphor-react';
 
 import { Avatar } from '../Avatar'
 
 import styles from './Comment.module.css';
 
-export function Comment(){
+export function Comment({id, author, publishedAt, content, applauses, onDeleteComment}){
+
+  const publishDate = publishedAt.toLocaleString('default', {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit'
+  });
+
+  const howLongAgo = formatDistanceToNow(publishedAt, {
+    locale: ptBr,
+    addSuffix: true
+  });
+
+  function handleDeleteComment() {
+    onDeleteComment(id);
+  }
+
   return(
     <div className={styles.comment}>
       <Avatar 
         border={false}
-        src='https://avatars.githubusercontent.com/u/77026784?v=4'
+        src={author.avatarUrl}
       />
       <div className={styles.commentBox}>
         <div className={styles.commentContent}>
 
           <header>
             <div className={styles.authorAndTime}>
-              <strong>Matheus Porto <span className={styles.you}>(você)</span></strong>
+              <strong>{author.name}
+                {author.name === 'Matheus Porto' && <span className={styles.you}> (você)</span>}
+              </strong>
               <time
-              title='08 de Janeiro às 14:05h' dateTime='2023-01-08 14:05:00'
+                title={`${publishDate} às ${publishedAt.toLocaleTimeString('default', {
+                  hour: '2-digit', 
+                  minute:'2-digit'
+                })}h`}
+                dateTime={publishedAt.toLocaleString()}
               >
-              Cerca de 2h atrás
+              {howLongAgo}
               </time>
             </div>
-            <button title='Deletar comentário'>
-              <Trash size={24}/>
-            </button>
+            {author.name === 'Matheus Porto' && (
+              <button
+                onClick={handleDeleteComment}
+                title='Deletar comentário'
+              >
+                <Trash size={24}/>
+              </button> 
+            )}
           </header>
 
-          <p>Muito bom Devon, parabénss!!</p>
+          <p>{content}</p>
         </div>
 
         <footer>
           <button>
             <ThumbsUp />
-            Aplaudir <span>23</span>
+            Aplaudir <span>{applauses}</span>
           </button>
         </footer>
       </div>

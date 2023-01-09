@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import ptBr from 'date-fns/locale/pt-BR';
 
@@ -6,7 +7,10 @@ import { Comment } from '../Comment'
 
 import styles from './Post.module.css'
 
-export function Post({ author, publishedAt, content }) {
+export function Post({ author, publishedAt, content, comments }) {
+
+  const [existingComments, setExistingComments] = useState(comments);
+  const [newCommentText, setNewCommentText] = useState('');
 
   const publishDate = publishedAt.toLocaleString('default', {
     year: 'numeric',
@@ -17,7 +21,33 @@ export function Post({ author, publishedAt, content }) {
   const howLongAgo = formatDistanceToNow(publishedAt, {
     locale: ptBr,
     addSuffix: true
-  })
+  });
+
+  function handleNewCommentChange(event) {
+    setNewCommentText(event.target.value);
+  }
+
+  function handleCreateNewComment(event) {
+    event.preventDefault();
+    setExistingComments([...existingComments, {
+        id: existingComments.length + 1,
+        author: {
+          avatarUrl: 'https://avatars.githubusercontent.com/u/77026784?v=4',
+          name: 'Matheus Porto'
+        },
+        publishedAt: new Date(),
+        content: newCommentText,
+        applauses: 0
+    }]);
+    setNewCommentText('');
+  }
+
+  function deleteComment(commentToDeleteId) {
+    const commentsWithoutDeletedOne = existingComments.filter((item) => {
+      return item.id !== commentToDeleteId
+    })
+    setExistingComments(commentsWithoutDeletedOne);
+  }
   
   return (
     <article className={styles.post}>
@@ -44,7 +74,7 @@ export function Post({ author, publishedAt, content }) {
       <div className={styles.content}>
         {content.map((item) => {
           return(
-            <p>
+            <p key={item.content}>
               {item.type === 'link' ? <a href=''>{item.content}</a> : item.content}
             </p>
           )
@@ -56,22 +86,35 @@ export function Post({ author, publishedAt, content }) {
         </p>
       </div>
 
-      <form className={styles.comment}>
+      <form className={styles.comment} onSubmit={handleCreateNewComment}>
         <label htmlFor="comment">Deixe seu feedback</label>
         <textarea
           name="comment"
           id="comment"
           placeholder='Escreva um comentário...'
+          onChange={handleNewCommentChange}
+          value={newCommentText}
+          required
         />
         <div className={styles.btnContainer}>
-          <button>Publicar</button>
+          <button disabled={!newCommentText}>Publicar</button>
         </div> 
       </form>
 
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {existingComments.map((item) => {
+          return(
+            <Comment 
+              key={item.id}
+              id={item.id}
+              author={item.author}
+              publishedAt={item.publishedAt}
+              content={item.content}
+              applauses={item.applauses}
+              onDeleteComment={deleteComment}
+            />  
+          )
+        })}
       </div>
       
     </article>
