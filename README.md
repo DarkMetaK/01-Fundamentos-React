@@ -4,7 +4,7 @@
 <br />
 <div align="center">
 
-  <a href="https://github.com/DarkMetaK/Ignite">
+  <a href="https://github.com/DarkMetaK/Ignite-Feed">
     <img src="/src/assets/igniteLogo.svg" alt="Logo" width="160" height="80">
   </a>
 
@@ -60,7 +60,7 @@ A aplicação se trata de um feed com algumas postagens estáticas, onde é poss
 
 1 - Clone o repositório
 ```sh
-git clone https://github.com/DarkMetaK/Ignite.git
+git clone https://github.com/DarkMetaK/Ignite-Feed.git
 ```
 
 2 - Instale as dependências
@@ -80,7 +80,7 @@ npm run dev
 
 Matheus Porto - [LinkedIn](https://www.linkedin.com/in/matheusport0/) - matporto03@gmail.com
 
-Link Repositório: [https://github.com/DarkMetaK/Ignite](https://github.com/DarkMetaK/Ignite)
+Link Repositório: [https://github.com/DarkMetaK/Ignite-Feed](https://github.com/DarkMetaK/Ignite)
 
 <p align="right">(<a href="#readme-top">Retornar ao topo</a>)</p>
 
